@@ -13,7 +13,7 @@ export function ProjectDetail({ project, onBack }: { project: Portfolio; onBack?
           className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors duration-300 bg-transparent border-none p-0 cursor-pointer"
         >
           <ArrowLeft size={14} />
-          <span className="tracking-wider uppercase">Back to Research</span>
+          <span>Back to research</span>
         </button>
       ) : (
         <Link
@@ -21,7 +21,7 @@ export function ProjectDetail({ project, onBack }: { project: Portfolio; onBack?
           className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors duration-300"
         >
           <ArrowLeft size={14} />
-          <span className="tracking-wider uppercase">Back to Research</span>
+          <span>Back to research</span>
         </Link>
       )}
 
@@ -30,10 +30,9 @@ export function ProjectDetail({ project, onBack }: { project: Portfolio; onBack?
       </h2>
 
       {project.body && (
-        <div
-          className="font-serif text-base leading-relaxed text-muted [&_a]:underline [&_a]:text-foreground [&_a:hover]:text-muted"
-          dangerouslySetInnerHTML={{ __html: project.body }}
-        />
+        <p className="text-base leading-relaxed text-muted">
+          {project.body.replace(/<[^>]*>/g, "")}
+        </p>
       )}
 
       {project.infoList && project.infoList.length > 0 && (

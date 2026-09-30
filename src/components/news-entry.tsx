@@ -16,7 +16,7 @@ export function NewsEntry({ news }: { news: News }) {
           </span>
         )}
       </div>
-      <h3 className="font-serif text-base text-foreground mb-2">
+      <h3 className="text-base font-medium text-foreground mb-2">
         {news.link ? (
           <a
             href={news.link}

@@ -1,132 +1,133 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Maximize2, X } from "lucide-react";
+import { ArrowUpRight, FlaskConical, Maximize2, X } from "lucide-react";
 import { Portfolio } from "@/data/portfolio";
 import { DISABLED_LINK_CLASSES, DISABLED_LINK_ICON_CLASSES } from "@/lib/constants";
 
 export function PortfolioEntry({ index, portfolio, onProjectClick }: { index: number; portfolio: Portfolio; onProjectClick?: (slug: string) => void }) {
-  const [showLightbox, setShowLightbox] = useState(false);
-
-  const close = useCallback(() => setShowLightbox(false), []);
-
-  useEffect(() => {
-    if (!showLightbox) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
-    };
-    document.addEventListener("keydown", handler);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", handler);
-      document.body.style.overflow = "";
-    };
-  }, [showLightbox, close]);
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewMounted, setPreviewMounted] = useState(false);
+  const linkedDescription = portfolio.description?.match(/^(.*?)<a href="(\/?\?section=publication)">([^<]+)<\/a>(.*)$/);
 
   return (
     <>
-      <div className="group border border-border/60 dark:border-foreground/10 rounded-xl overflow-hidden flex flex-col hover:border-foreground/40 dark:hover:border-foreground/20 transition-colors duration-300">
-        {portfolio.imageUrl && (
-          <div
-            className="relative mx-4 mt-4 rounded-xl overflow-hidden h-36 cursor-pointer group"
-            onClick={() => setShowLightbox(true)}
+      <article className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-6">
+        {portfolio.imageUrl ? (
+          <button
+            type="button"
+            aria-label={`${showPreview ? "Hide" : "Show"} image preview for ${portfolio.title}`}
+            aria-expanded={showPreview}
+            className="group relative aspect-[4/3] w-full shrink-0 cursor-zoom-in overflow-hidden rounded-lg bg-surface-2 sm:w-52"
+            onClick={() => {
+              if (showPreview) {
+                setShowPreview(false);
+              } else {
+                setPreviewMounted(true);
+                setShowPreview(true);
+              }
+            }}
           >
             <Image
               src={portfolio.imageUrl}
-              alt={portfolio.title}
+              alt=""
               fill
-              className="object-cover"
+              sizes="(max-width: 640px) 100vw, 208px"
+              className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             />
-            <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <Maximize2 size={12} className="text-foreground" />
-            </div>
+            <span aria-hidden="true" className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-background/85 text-foreground shadow-sm backdrop-blur-sm transition-colors group-hover:bg-background">
+              <Maximize2 size={15} />
+            </span>
+          </button>
+        ) : (
+          <div
+            aria-hidden="true"
+            className="relative flex aspect-[4/3] w-full shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-gradient-to-br from-surface to-surface-2 text-muted sm:w-52"
+          >
+            <span className="absolute h-24 w-24 rounded-full border border-foreground/10" />
+            <span className="absolute h-16 w-16 rounded-full border border-foreground/10" />
+            <FlaskConical size={24} strokeWidth={1.25} className="relative opacity-60" />
           </div>
         )}
-        <div className="p-4 flex flex-col flex-1">
-        <div className="text-sm text-muted mb-2 flex items-center gap-2 flex-wrap">
-          {portfolio.showMeta && portfolio.technologies && portfolio.technologies.length > 0 ? (
-            <span>
-              <span className="font-semibold text-accent uppercase tracking-wider">{index + 1}</span>
-              <span className="text-muted"> · </span>
-              <span>{portfolio.technologies.join(", ")}</span>
-            </span>
-          ) : (
-            <span className="font-semibold text-accent uppercase tracking-wider">{index + 1}</span>
+
+        <div className="min-w-0 flex-1">
+          <div className="mb-2 text-sm text-muted">
+            {portfolio.technologies?.join(" · ") || `Project ${index + 1}`}
+          </div>
+          <h3 className="mb-2 font-serif text-base">{portfolio.title}</h3>
+          {portfolio.description && (
+            <p className="mb-3 text-sm leading-relaxed text-muted">
+              {linkedDescription ? (
+                <>
+                  {linkedDescription[1]}
+                  <Link href={linkedDescription[2]} className="underline text-foreground">{linkedDescription[3]}</Link>
+                  {linkedDescription[4]}
+                </>
+              ) : portfolio.description.replace(/<[^>]*>/g, "")}
+            </p>
+          )}
+
+          {portfolio.showMeta && (
+            <div className="flex gap-4">
+              {portfolio.slug && portfolio.projectLink !== false ? (
+                <Link
+                  href={`/research/${portfolio.slug}`}
+                  onClick={onProjectClick ? (e) => { e.preventDefault(); onProjectClick(portfolio.slug!); } : undefined}
+                  className="inline-flex items-center gap-1.5 text-xs text-muted transition-colors hover:text-foreground"
+                >
+                  <ArrowUpRight size={10} />
+                  <span>Project</span>
+                </Link>
+              ) : portfolio.slug && (
+                <span className={`inline-flex items-center gap-1.5 text-xs ${DISABLED_LINK_CLASSES}`}>
+                  <ArrowUpRight size={10} className={DISABLED_LINK_ICON_CLASSES} />
+                  <span>Project</span>
+                </span>
+              )}
+              {portfolio.codeUrl && (
+                <a
+                  href={portfolio.codeUrl}
+                  className="inline-flex items-center gap-1.5 text-xs text-muted transition-colors hover:text-foreground"
+                >
+                  <ArrowUpRight size={10} />
+                  <span>Code</span>
+                </a>
+              )}
+            </div>
           )}
         </div>
 
-        <h3 className="font-serif text-base mb-2">{portfolio.title}</h3>
-
-        {portfolio.description && (
-          <p
-            className="text-sm text-muted leading-relaxed mb-3 [&_a]:underline [&_a]:text-foreground [&_a:hover]:text-muted"
-            dangerouslySetInnerHTML={{ __html: portfolio.description }}
-          />
-        )}
-
-        {portfolio.showMeta && (
-          <div className="flex gap-4 mt-auto">
-            {portfolio.slug && portfolio.projectLink !== false ? (
-              <Link
-                href={`/research/${portfolio.slug}`}
-                onClick={onProjectClick ? (e) => { e.preventDefault(); onProjectClick(portfolio.slug!); } : undefined}
-                className="project-link group/project-link inline-flex items-center gap-1.5 text-xs text-muted hover:text-foreground transition-colors duration-300"
-              >
-                <ArrowUpRight
-                  size={10}
-                  className="group-hover/project-link:translate-x-0.5 group-hover/project-link:-translate-y-0.5 transition-transform duration-300"
-                />
-                <span className="tracking-wider uppercase">Project</span>
-              </Link>
-            ) : portfolio.slug && (
-              <span className={`inline-flex items-center gap-1.5 text-xs ${DISABLED_LINK_CLASSES}`}>
-                <ArrowUpRight size={10} className={DISABLED_LINK_ICON_CLASSES} />
-                <span className="tracking-wider uppercase">Project</span>
-              </span>
-            )}
-            {portfolio.codeUrl && (
-              <a
-                href={portfolio.codeUrl}
-                className="group/link inline-flex items-center gap-1.5 text-xs text-muted hover:text-foreground transition-colors duration-300"
-              >
-                <ArrowUpRight
-                  size={10}
-                  className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform duration-300"
-                />
-                <span className="tracking-wider uppercase">Code</span>
-              </a>
-            )}
-          </div>
-        )}
-        </div>
-      </div>
-
-      {showLightbox && portfolio.imageUrl && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
-          onClick={close}
-        >
+        {portfolio.imageUrl && previewMounted && (
           <div
-            className="relative max-w-[90vw] max-h-[90vh]"
-            onClick={(e) => e.stopPropagation()}
+            className={`${showPreview ? "animate-lightbox-in" : "animate-lightbox-out"} w-full basis-full rounded-xl border border-border bg-surface p-3 sm:p-4`}
+            onAnimationEnd={() => {
+              if (!showPreview) setPreviewMounted(false);
+            }}
           >
-            <Image
-              src={portfolio.imageUrl}
-              alt={portfolio.title}
-              width={1600}
-              height={1200}
-              className="w-auto h-auto max-w-[90vw] max-h-[90vh] object-contain rounded-lg drop-shadow-2xl"
-              sizes="90vw"
-            />
-            <button
-              className="absolute -top-3 -right-3 z-10 w-7 h-7 rounded-full bg-background/90 dark:bg-zinc-800/90 flex items-center justify-center hover:bg-background dark:hover:bg-zinc-800 transition-colors"
-              onClick={close}
-            >
-              <X size={13} className="text-foreground" />
-            </button>
+            <div className="mb-3 flex items-center justify-between gap-4">
+              <span className="text-xs text-muted">Image preview</span>
+              <button
+                type="button"
+                onClick={() => setShowPreview(false)}
+                className="inline-flex min-h-9 items-center gap-2 rounded-md px-2 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-foreground"
+              >
+                <X size={14} />
+                Hide preview
+              </button>
+            </div>
+            <div className="flex justify-center rounded-lg bg-surface-2 p-2 sm:p-4">
+              <Image
+                src={portfolio.imageUrl}
+                alt={portfolio.title}
+                width={1600}
+                height={1200}
+                className="max-h-[65vh] w-auto max-w-full object-contain"
+                sizes="(max-width: 640px) 100vw, 70vw"
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </article>
     </>
   );
 }

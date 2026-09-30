@@ -30,13 +30,13 @@ export const aboutMe: AboutMe = {
   title: "PhD CompSci",
   institution: "Cardiff University",
   // Note that links work in the description
-  description: `Hello there! 🌊 I'm Loic, a PhD student at Cardiff University 🏴󠁧󠁢󠁷󠁬󠁳󠁿 in the School of Computer Science and Informatics and with the <a href="https://www.agilecps.org/" target="_blank">AGILE Lab</a>.
-  <ul style="margin-top:10px;margin-bottom:10px;padding-left:0.5rem">
-    <li style="margin:0 0 4px 0">> I finished my <b>BSc in Computer Science from Cardiff University</b> in 2024, graduating with First Class Honours. My dissertation was presented with the best undergraduate dissertation award.</li>
-    <li style="margin:0 0 4px 0">> I have completed an <b>MPhil</b> under the supervision of Dr Amir Javed, investigating machine learning intrusion detection for vehicular 🚙 systems.</li>
-    <li style="margin:0 0 4px 0;color:rgb(var(--accent))">> I recently started my <b>PhD</b> under the supervision of Dr. Nick Pham.</li>
+  description: `<p>I'm Loic, a <strong>PhD student</strong> in the School of Computer Science and Informatics at <strong>Cardiff University</strong> + <a href="https://www.agilecps.org/" target="_blank" rel="noopener noreferrer"><strong>AGILE Lab</strong></a>.</p>
+  <ul style="margin:12px 0;padding-left:1.25rem;list-style:disc">
+    <li style="margin:0 0 8px">I completed a <strong>BSc in Computer Science</strong> at Cardiff University in 2024, graduating with <strong>First Class Honours</strong>. My dissertation received the <strong>Best Undergraduate Dissertation award</strong> in CompSci.</li>
+    <li style="margin:0 0 8px">I completed an <strong>MPhil</strong> with Dr Amir Javed, researching <strong>machine-learning methods for intrusion detection in vehicles</strong>. I completed my Viva with <strong>no corrections</strong>.</li>
+    <li style="color:rgb(var(--accent))">I am now pursuing a <strong>PhD</strong> under the supervision of Dr Nick Pham.</li>
   </ul>
-  My research primarily involves exploring machine learning, amongst other things, for human sensing and edge computing.
+  <p>My research focuses on <strong>systems for human sensing</strong>, including <strong>machine learning</strong> and <strong>edge computing</strong>.</p>
   `,
   email: "lorentelemoinel@cardiff.ac.uk",
   imageUrl: frontpage,

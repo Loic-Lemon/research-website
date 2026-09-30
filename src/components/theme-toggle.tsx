@@ -22,15 +22,12 @@ export function ThemeToggle() {
     <button
       onClick={toggle}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-      className="flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors"
+      className="flex items-center text-sm text-muted hover:text-foreground transition-colors"
     >
       {mounted ? (
-        <>
-          {dark ? <Sun size={14} /> : <Moon size={14} />}
-          <span className="text-xs italic">Switch to {dark ? "light" : "dark"} mode</span>
-        </>
+        dark ? <Sun size={14} /> : <Moon size={14} />
       ) : (
-        <span className="opacity-0 text-xs italic">Switch to dark mode</span>
+        <span className="opacity-0"><Moon size={14} /></span>
       )}
     </button>
   );

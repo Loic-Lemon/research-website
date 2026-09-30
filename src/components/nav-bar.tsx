@@ -71,7 +71,7 @@ export function NavBar({ activeSection, onNavigate }: NavBarProps) {
           className={`
             flex flex-col items-center gap-4
             md:flex-row md:justify-center md:gap-2
-            text-base leading-relaxed text-foreground text-center font-serif
+            text-base leading-relaxed text-foreground text-center font-sans
           `}
         >
           {quickLinks.map((link, idx) => (

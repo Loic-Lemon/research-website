@@ -64,7 +64,7 @@ export function ProfileSection({ aboutMe }: ProfileSectionProps) {
           <p className="text-xs italic text-muted opacity-60 mb-3">{aboutMe.pronunciation}</p>
         )}
         {aboutMe.altName && (
-          <p className="text-muted text-sm leading-relaxed tracking-wide mb-6">
+          <p className="text-muted text-sm leading-relaxed mb-6">
             {aboutMe.altName}
           </p>
         )}
@@ -84,6 +84,42 @@ export function ProfileSection({ aboutMe }: ProfileSectionProps) {
             aboutMe.institution
           )}
         </p>
+        <div className="flex items-center gap-3 mb-3">
+          {aboutMe.institutionUrl && (
+            <a
+              href={aboutMe.institutionUrl}
+              aria-label="Cardiff University"
+              title="Cardiff University"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src="/logos/cardiff-university.svg"
+                alt="Cardiff University logo"
+                width={64}
+                height={64}
+                className="h-16 w-16 object-contain"
+              />
+            </a>
+          )}
+          {aboutMe.labUrl && (
+            <a
+              href={aboutMe.labUrl}
+              aria-label="AGILE Lab"
+              title="AGILE Lab"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src="/logos/agilelab.png"
+                alt="AGILE Lab logo"
+                width={64}
+                height={64}
+                className="h-16 w-16 object-contain"
+              />
+            </a>
+          )}
+        </div>
         <div className="flex gap-6 mb-6">
           {aboutMe.blogUrl && (
             <a

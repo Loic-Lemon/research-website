@@ -160,7 +160,7 @@ function HomeContent() {
           {aboutMe.description && (
             <section>
               <div
-                className="font-serif text-base leading-relaxed text-muted [&_a]:underline [&_a]:text-foreground [&_a:hover]:text-muted"
+                className="text-base leading-relaxed text-foreground/90 [&_a]:underline [&_a]:text-foreground [&_a:hover]:text-muted"
                 dangerouslySetInnerHTML={{ __html: aboutMe.description }}
               />
             </section>
@@ -296,7 +296,7 @@ function HomeContent() {
               <h2 className="font-serif font-bold text-xl mb-8 tracking-wide uppercase border-b border-foreground">
                 Research
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="space-y-6 [&>*+*]:item-separator [&>*+*]:pt-6">
                 {portfolioData.map((portfolio, index) => (
                   <PortfolioEntry key={index} index={index} portfolio={portfolio} onProjectClick={(slug) => { window.scrollTo({ top: 0, behavior: 'smooth' }); navigateTo(Section.Portfolio, slug); }} />
                 ))}
