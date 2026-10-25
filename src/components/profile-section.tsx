@@ -79,10 +79,10 @@ export function ProfileSection({ aboutMe }: ProfileSectionProps) {
           </filter>
         </defs>
       </svg>
-      <div className="flex flex-row-reverse md:fixed md:top-24 md:w-[var(--profile-width)] md:flex-col gap-2 md:space-y-6 md:max-h-[calc(100dvh-7rem)] md:overflow-y-auto">
+      <div className="profile-panel flex flex-row-reverse gap-2">
         {aboutMe.imageUrl && (
-          <div className="w-2/5 md:w-full flex-shrink-0">
-            <div className="relative max-h-[45vh] md:w-[65%] aspect-[3/4] group overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow duration-500">
+          <div className="profile-portrait-slot w-2/5 flex-shrink-0">
+            <div className="profile-portrait relative max-h-[45vh] aspect-[3/4] group overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-shadow duration-500">
               <Image
                 src={aboutMe.imageUrl}
                 alt={aboutMe.name}
@@ -103,7 +103,7 @@ export function ProfileSection({ aboutMe }: ProfileSectionProps) {
             </div>
           </div>
         )}
-        <div className="min-w-0 flex-1 md:w-full md:flex-none">
+        <div className="profile-details min-w-0 flex-1">
         <h1 className="font-serif text-4xl font-light tracking-wide mb-3">
           {aboutMe.name.endsWith("Lemoine") ? (
             <>
@@ -139,7 +139,7 @@ export function ProfileSection({ aboutMe }: ProfileSectionProps) {
             aboutMe.institution
           )}
         </p>
-        <div className="flex items-center gap-3 mb-3">
+        <div className="profile-logos flex items-center gap-3 mb-3">
           {aboutMe.institutionUrl && (
             <a
               href={aboutMe.institutionUrl}
@@ -182,8 +182,8 @@ export function ProfileSection({ aboutMe }: ProfileSectionProps) {
             </a>
           )}
         </div>
-        <div className="flex gap-6 mb-6">
-          {aboutMe.blogUrl && (
+        {aboutMe.blogUrl && (
+          <div className="flex gap-6 mb-6">
             <a
               href={aboutMe.blogUrl}
               className="group inline-flex items-center gap-2 text-sm text-muted hover:text-accent focus-visible:text-accent transition-colors duration-300"
@@ -196,22 +196,8 @@ export function ProfileSection({ aboutMe }: ProfileSectionProps) {
               />
               <span className="tracking-wider uppercase">Notebook</span>
             </a>
-          )}
-          {/* {aboutMe.cvUrl && (
-            <a
-              href={aboutMe.cvUrl}
-              className="group inline-flex items-center gap-2 text-xs text-muted hover:text-accent focus-visible:text-accent transition-colors duration-300"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ArrowUpRight
-                size={12}
-                className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300"
-              />
-              <span className="tracking-wider uppercase">CV</span>
-            </a>
-          )} */}
-        </div>
+          </div>
+        )}
         <div className="space-y-2 md:[&>a]:max-w-full md:[&>a]:[overflow-wrap:anywhere] md:[&>a>svg]:shrink-0">
           <a
             href={`mailto:${aboutMe.email}`}

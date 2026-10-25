@@ -398,7 +398,7 @@ function HomeContent() {
       <NavBar activeSection={selectedSection} onNavigate={navigateTo} />
       <div className="max-w-screen-lg mx-auto px-8 py-28">
         {/* Grid Layout */}
-        <div className="flex flex-col md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-2">
+        <div className="profile-layout flex flex-col gap-2">
           {/* Left Column - Fixed Info */}
           <div className="mb-8 md:mb-0">
             <ProfileSection aboutMe={aboutMe} />

@@ -74,6 +74,89 @@ li strong {
   margin-top: var(--section-heading-space-before);
 }
 
+@media (min-width: 900px) {
+  .profile-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  }
+
+  .profile-panel {
+    position: fixed;
+    top: 6rem;
+    width: var(--profile-width);
+    max-height: calc(100dvh - 7rem);
+    overflow-y: auto;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .profile-portrait-slot,
+  .profile-details {
+    width: 100%;
+  }
+
+  .profile-details {
+    flex: none;
+  }
+
+  .profile-portrait {
+    width: 65%;
+  }
+}
+
+@media (min-width: 900px) and (max-height: 819px) {
+  .profile-panel {
+    top: 4.5rem;
+    max-height: calc(100dvh - 5.5rem);
+    gap: 1rem;
+  }
+
+  .profile-portrait {
+    width: min(65%, 21dvh);
+  }
+
+  .profile-details > :not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+
+  .profile-logos img {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+/* Very short windows need the profile in the page flow to keep every link reachable. */
+@media (min-width: 900px) and (max-height: 599px) {
+  .profile-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .profile-panel {
+    position: static;
+    width: 100%;
+    max-height: none;
+    overflow-y: visible;
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  .profile-portrait-slot {
+    width: 10rem;
+  }
+
+  .profile-portrait {
+    width: 100%;
+    max-height: none;
+  }
+
+  .profile-details {
+    width: auto;
+    flex: 1;
+  }
+}
+
 /* Nav link: the hidden ::before pseudo-element renders the label
    at font-weight: 700, locking each button's width to its own
    bold version. Toggling font-weight between active (bold) and
