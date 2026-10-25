@@ -21,16 +21,17 @@ export function AllNewsView({ news, onBack }: { news: News[]; onBack: () => void
     : news.filter((item) => item.date.endsWith(selectedYear));
 
   return (
-    <div className="space-y-8">
+    <div>
       <button
+        type="button"
         onClick={onBack}
-        className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors duration-300 bg-transparent border-none p-0 cursor-pointer"
+        className="btn-chip align-top"
       >
-        <ArrowLeft size={14} />
-        <span className="tracking-wider uppercase">Back</span>
+        <ArrowLeft size={12} data-back />
+        <span>Back</span>
       </button>
 
-      <div className="flex justify-between items-baseline border-b border-foreground pb-2">
+      <div className="section-heading flex justify-between items-baseline pb-2">
         <h2 className="font-serif font-bold text-xl tracking-wide uppercase">
           All Highlights
         </h2>
@@ -53,7 +54,7 @@ export function AllNewsView({ news, onBack }: { news: News[]; onBack: () => void
       {filteredNews.length === 0 ? (
         <p className="text-sm text-muted italic">No highlights for this year.</p>
       ) : (
-        <div className="space-y-6 [&>*+*]:item-separator [&>*+*]:pt-6">
+        <div className="space-y-4 [&>*+*]:item-separator [&>*+*]:pt-4">
           {filteredNews.map((item, index) => (
             <NewsEntry key={index} news={item} />
           ))}

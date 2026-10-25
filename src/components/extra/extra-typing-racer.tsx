@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { ArrowLeft } from 'lucide-react';
 
 const passages = [
   "The elegance of a scientific theory lies in its ability to explain complex phenomena through simple elegant principles.",
@@ -94,13 +95,15 @@ export function ExtraTypingRacer({ onBack }: ExtraTypingRacerProps) {
   }, []);
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between border-b border-foreground pb-4">
+    <div>
+      <div className="section-heading flex items-center justify-between pb-4">
         <button
+          type="button"
           onClick={onBack}
-          className="text-sm text-muted italic hover:text-foreground bg-transparent border-none p-0 cursor-pointer transition-colors"
+          className="btn-chip"
         >
-          ← Back
+          <ArrowLeft size={12} data-back />
+          <span>Back</span>
         </button>
         {!isFinished && (
           <span className="text-xs text-muted italic">
@@ -136,7 +139,7 @@ export function ExtraTypingRacer({ onBack }: ExtraTypingRacerProps) {
         })}
       </div>
 
-      <div className="flex items-center gap-4 text-sm text-muted">
+      <div className="mt-8 flex items-center gap-4 text-sm text-muted">
         {!isFinished ? (
           <>
             <span>

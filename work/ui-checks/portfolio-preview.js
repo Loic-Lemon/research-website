@@ -42,6 +42,7 @@
     document.querySelector('[popover]:popover-open [aria-label="Close image preview"]').click();
     checks.push(button.getAttribute('aria-label'));
   }
+  assert(![...document.querySelectorAll('#research article p')].some(p => /\((PhD|MPhil) Project\)/.test(p.textContent)), 'Degree labels must not repeat in descriptions');
   assert(document.documentElement.scrollWidth <= innerWidth, 'Research layout must not overflow');
   return { passed: true, viewport: `${innerWidth}×${innerHeight}`, viewers: checks, checks: 'compact image, no layout shift or scrim, image loading, instant dismissal, focus, reading position, reopen and switching images' };
 })()

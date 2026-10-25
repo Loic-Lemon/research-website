@@ -2,7 +2,7 @@ export interface Education {
   year: string;
   institution: string;
   degree: string;
-  advisor?: string;
+  advisors?: { name: string; affiliation?: string }[];
   thesis?: string;
   thesisUrl?: string;
   details?: string[];
@@ -11,22 +11,30 @@ export interface Education {
 export const educationData: Education[] = [
   // If you don't want to show education, just make the array empty.
   {
-    year: "2026-Present",
+    year: "2026 – Present",
     institution: "Cardiff University",
     degree: "PhD Computer Science",
-    advisor: "Dr. Nick Pham <small>(School of Computer Science)</small>, Prof. Jonathan Bisson <small>(School of Medicine)</small>, Dr. Jonas Beuchert <small>(School of Computer Science)</small>, Mr Cuong Nguyen <small>(Google Health London)</small>",
+    advisors: [
+      { name: "Dr. Nick Pham", affiliation: "School of Computer Science" },
+      { name: "Prof. Jonathan Bisson", affiliation: "School of Medicine" },
+      { name: "Dr. Jonas Beuchert", affiliation: "School of Computer Science" },
+      { name: "Mr Cuong Nguyen", affiliation: "Google Health London" },
+    ],
     thesis: " Continuous stress monitoring with biosensing wearable"
   },
   {
-    year: "2024—2026",
+    year: "2024 – 2026",
     institution: "Cardiff University",
     degree: "MPhil Computer Science",
-    advisor: "Dr. Amir Javed <small>(School of Computer Science)</small>, Dr. Nick Pham <small>(School of Computer Science)</small>",
+    advisors: [
+      { name: "Dr. Amir Javed", affiliation: "School of Computer Science" },
+      { name: "Dr. Nick Pham", affiliation: "School of Computer Science" },
+    ],
     details: ["Viva passed with no corrections"],
     thesis: "Machine Learning Intrusion Detection Sytems for Vehicular Networks"
   },
   {
-    year: "2021—2024",
+    year: "2021 – 2024",
     institution: "Cardiff University",
     degree: "BSc Computer Science",
     details: ["First Class Honours", "Best Dissertation (93%)"],

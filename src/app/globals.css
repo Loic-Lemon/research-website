@@ -11,6 +11,8 @@
   --border: 229 229 229;
   --accent: 25 75 210;
   --accent-fg: 255 255 255;
+  --section-heading-space-before: 3rem;
+  --section-heading-space-after: 2rem;
 }
 
 .dark {
@@ -25,13 +27,24 @@
 }
 
 html {
-  scroll-padding-top: 64px
+  scroll-padding-top: 64px;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 body {
   color: rgb(var(--foreground));
   background: rgb(var(--background));
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+p strong,
+li strong {
+  font-weight: 500;
+  color: color-mix(in srgb, rgb(var(--accent)) 65%, rgb(var(--muted)));
 }
 
 /* Elements marked with serif class or font-serif will use Source Serif */
@@ -45,6 +58,20 @@ body {
 .font-sans,
 .sans {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+.section-heading {
+  margin-top: var(--section-heading-space-before);
+  margin-bottom: var(--section-heading-space-after);
+  border-bottom: 1px solid rgb(var(--foreground));
+}
+
+.section-heading:first-child {
+  margin-top: 0;
+}
+
+.section-stack > * + * {
+  margin-top: var(--section-heading-space-before);
 }
 
 /* Nav link: the hidden ::before pseudo-element renders the label
@@ -65,6 +92,57 @@ body {
   visibility: hidden;
   pointer-events: none;
   white-space: nowrap;
+}
+
+.menu-toggle-icon {
+  position: relative;
+  width: 18px;
+  height: 16px;
+}
+
+.menu-toggle-icon span {
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 18px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 150ms ease;
+}
+
+.menu-toggle-icon span:first-child { transform: translateY(-5px); }
+.menu-toggle-icon span:last-child { transform: translateY(5px); }
+.site-nav[data-open="true"] .menu-toggle-icon span:first-child { transform: rotate(45deg); }
+.site-nav[data-open="true"] .menu-toggle-icon span:nth-child(2) { transform: scaleX(0); opacity: 0; }
+.site-nav[data-open="true"] .menu-toggle-icon span:last-child { transform: rotate(-45deg); }
+
+.mobile-page-progress:focus-within {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 4px;
+}
+
+@media (max-width: 899px) {
+  .quick-links-panel {
+    max-height: calc(100dvh - 6rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 150ms ease, transform 180ms ease, visibility 180ms;
+  }
+
+  .site-nav[data-open="true"] .quick-links-panel {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-toggle-icon span,
+  .quick-links-panel {
+    transition: none;
+  }
 }
 
 @keyframes fade-out-up {
@@ -115,6 +193,302 @@ body {
   animation: pulse-scale 3s ease-in-out infinite;
 }
 
+.surname-hover {
+  position: relative;
+  display: inline-block;
+}
+
+.surname-lemon {
+  position: absolute;
+  top: 0.35em;
+  left: calc(100% + 3px);
+  font: 20px/1 system-ui, sans-serif;
+  letter-spacing: normal;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.surname-hover:hover .surname-lemon {
+  animation: lemon-pop 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes lemon-pop {
+  0% { opacity: 0; transform: translateY(3px) rotate(-15deg) scale(0.7); }
+  70% { opacity: 1; transform: translateY(-3px) rotate(10deg) scale(1.08); }
+  100% { opacity: 1; transform: translateY(-2px) rotate(6deg) scale(1); }
+}
+
+.mail-icon,
+.linkedin-icon,
+.lab-icon {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+
+.mail-closed,
+.mail-open {
+  transition: opacity 150ms ease;
+}
+
+.mail-open,
+.mail-pigeon {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.mail-open {
+  z-index: 1;
+}
+
+.mail-link:is(:hover, :focus-visible) .mail-closed {
+  opacity: 0;
+}
+
+.mail-link:is(:hover, :focus-visible) .mail-open {
+  opacity: 1;
+}
+
+.mail-link:is(:hover, :focus-visible) .mail-pigeon {
+  animation: pigeon-flight 900ms ease-in-out both;
+}
+
+.mail-link:is(:hover, :focus-visible) .mail-pigeon path:last-child {
+  transform-box: fill-box;
+  transform-origin: right center;
+  animation: pigeon-wing 180ms ease-in-out 5;
+}
+
+@keyframes pigeon-flight {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.25); }
+  20% { opacity: 1; transform: translate(1px, -8px) scale(0.85) rotate(-12deg); }
+  55% { opacity: 1; transform: translate(8px, -18px) scale(1) rotate(8deg); }
+  100% { opacity: 0; transform: translate(22px, -30px) scale(0.75) rotate(-12deg); }
+}
+
+@keyframes pigeon-wing {
+  50% { transform: scaleX(0.55) rotate(-12deg); }
+}
+
+.linkedin-check {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  display: grid;
+  place-items: center;
+  width: 13px;
+  height: 13px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: rgb(var(--background));
+  opacity: 0;
+}
+
+.linkedin-link:is(:hover, :focus-visible) .linkedin-mark {
+  animation: connection-nod 700ms ease-in-out;
+}
+
+.linkedin-link:is(:hover, :focus-visible) .linkedin-check {
+  animation: connection-pop 900ms ease-in-out both;
+}
+
+@keyframes connection-nod {
+  0%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-2px) rotate(-6deg); }
+  65% { transform: translateY(0) rotate(4deg); }
+}
+
+@keyframes connection-pop {
+  0%, 100% { opacity: 0; transform: translateY(3px) scale(0.4); }
+  25%, 75% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.lab-bubbles {
+  position: absolute;
+  inset: 0;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+
+.lab-bubbles > span {
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  width: 4px;
+  height: 4px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.lab-bubbles > span:nth-child(2) { left: 1px; width: 3px; height: 3px; }
+.lab-bubbles > span:nth-child(3) { left: 9px; width: 3px; height: 3px; }
+
+.lab-link:is(:hover, :focus-visible) .lab-flask {
+  transform-origin: center bottom;
+  animation: lab-stir 700ms ease-in-out;
+}
+
+.lab-link:is(:hover, :focus-visible) .lab-bubbles > span {
+  animation: lab-bubble 750ms ease-out both;
+}
+
+.lab-link:is(:hover, :focus-visible) .lab-bubbles > span:nth-child(2) { animation-delay: 120ms; }
+.lab-link:is(:hover, :focus-visible) .lab-bubbles > span:nth-child(3) { animation-delay: 240ms; }
+
+@keyframes lab-stir {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-6deg); }
+  55% { transform: rotate(5deg); }
+  80% { transform: rotate(-2deg); }
+}
+
+@keyframes lab-bubble {
+  0% { opacity: 0; transform: translateY(2px) scale(0.4); }
+  20% { opacity: 0.85; }
+  100% { opacity: 0; transform: translateY(-25px) scale(1.1); }
+}
+
+.lab-biosignal {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: -2px;
+  width: 68px;
+  height: 20px;
+  color: rgb(var(--accent));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.biosignal-trace {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.biosignal-link:is(:hover, :focus-visible) .lab-biosignal {
+  animation: biosignal-reveal 1100ms ease-in-out both;
+}
+
+.biosignal-link:is(:hover, :focus-visible) .biosignal-trace {
+  animation: biosignal-draw 800ms linear both;
+}
+
+@keyframes biosignal-reveal {
+  0%, 100% { opacity: 0; }
+  15%, 82% { opacity: 1; }
+}
+
+@keyframes biosignal-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+.cardiff-dragon {
+  position: absolute;
+  top: -26px;
+  left: 16px;
+  width: 56px;
+  height: 40px;
+  color: #d73648;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(14px) scale(0.45);
+  transform-origin: center bottom;
+  transition: opacity 150ms ease;
+}
+
+.cardiff-link:is(:hover, :focus-visible) .cardiff-dragon {
+  animation: dragon-emerge 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cardiff-link:is(:hover, :focus-visible) .dragon-wing {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: dragon-wing 240ms ease-in-out 3;
+}
+
+.cardiff-link:is(:hover, :focus-visible) .dragon-tail {
+  transform-box: fill-box;
+  transform-origin: right center;
+  animation: dragon-tail 420ms ease-in-out 2;
+}
+
+.dragon-breath {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+
+.cardiff-link:is(:hover, :focus-visible) .dragon-breath {
+  animation: dragon-breath 650ms ease-out 350ms both;
+}
+
+@keyframes dragon-emerge {
+  0% { opacity: 0; transform: translateY(14px) scale(0.45); }
+  50% { opacity: 1; transform: translateY(-3px) scale(1.06); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes dragon-wing {
+  50% { transform: scaleX(0.7) rotate(-12deg); }
+}
+
+@keyframes dragon-tail {
+  50% { transform: rotate(-10deg); }
+}
+
+@keyframes dragon-breath {
+  0%, 100% { opacity: 0; transform: scaleX(0.2); }
+  30%, 65% { opacity: 1; transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mail-closed,
+  .mail-open {
+    transition: none;
+  }
+
+  .mail-link:is(:hover, :focus-visible) .mail-pigeon,
+  .mail-link:is(:hover, :focus-visible) .mail-pigeon path:last-child {
+    animation: none;
+  }
+
+  .linkedin-link:is(:hover, :focus-visible) .linkedin-mark,
+  .linkedin-link:is(:hover, :focus-visible) .linkedin-check,
+  .lab-link:is(:hover, :focus-visible) .lab-flask,
+  .lab-link:is(:hover, :focus-visible) .lab-bubbles > span,
+  .biosignal-link:is(:hover, :focus-visible) .lab-biosignal,
+  .biosignal-link:is(:hover, :focus-visible) .biosignal-trace,
+  .surname-hover:hover .surname-lemon,
+  .cardiff-link:is(:hover, :focus-visible) .cardiff-dragon,
+  .cardiff-link:is(:hover, :focus-visible) .dragon-wing,
+  .cardiff-link:is(:hover, :focus-visible) .dragon-tail,
+  .cardiff-link:is(:hover, :focus-visible) .dragon-breath {
+    animation: none;
+  }
+
+  .cardiff-dragon { transition: none; }
+
+  .biosignal-link:is(:hover, :focus-visible) .lab-biosignal {
+    opacity: 1;
+  }
+
+  .biosignal-link:is(:hover, :focus-visible) .biosignal-trace {
+    stroke-dashoffset: 0;
+  }
+
+  .linkedin-link:is(:hover, :focus-visible) .linkedin-check,
+  .surname-hover:hover .surname-lemon,
+  .cardiff-link:is(:hover, :focus-visible) .cardiff-dragon {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .item-separator {
   border-top: 1px solid currentColor;
   opacity: 0.07;
@@ -154,5 +528,117 @@ body {
   .animate-lightbox-in,
   .animate-lightbox-out {
     animation-duration: 1ms;
+  }
+}
+
+/* Clickable "Traverse" word in the intro copy */
+.nav-glow-trigger {
+  font: inherit;
+  color: rgb(var(--accent));
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-underline-offset: 4px;
+}
+
+.nav-glow-trigger:hover {
+  text-decoration-style: solid;
+}
+
+/* Small uppercase chip button: Project / Code / "Show more" and future
+   button-like links so they all share one look. */
+.btn-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+  border: 1px solid rgb(var(--foreground) / 0.15);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgb(var(--muted));
+  background: none;
+  cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.btn-chip > svg {
+  transition: transform 300ms ease;
+}
+
+.btn-chip:hover {
+  color: rgb(var(--accent));
+  border-color: rgb(var(--accent) / 0.5);
+}
+
+.btn-chip:hover > svg:not([data-static]) {
+  transform: translate(2px, -2px);
+}
+
+.btn-chip:hover > svg[data-back] {
+  transform: translateX(-2px);
+}
+
+.btn-chip:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 3px;
+}
+
+/* Rotating gradient "sunshine" sweep behind the nav bar.
+   --nav-glow-angle needs @property for the rotation to animate;
+   older browsers only fade the glow in and out. */
+@property --nav-glow-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.site-nav.nav-glow::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  z-index: -1;
+  border-radius: 16px;
+  background: conic-gradient(
+    from var(--nav-glow-angle, 0deg),
+    rgb(var(--accent)) 0deg,
+    transparent 70deg,
+    rgb(var(--accent)) 140deg,
+    transparent 210deg,
+    rgb(var(--accent)) 280deg,
+    transparent 360deg
+  );
+  filter: blur(12px);
+  opacity: 0;
+  animation: nav-glow 1.8s ease-in-out forwards;
+  pointer-events: none;
+}
+
+@keyframes nav-glow {
+  0% {
+    opacity: 0;
+    --nav-glow-angle: 0deg;
+  }
+  25% {
+    opacity: 0.85;
+  }
+  70% {
+    opacity: 0.85;
+    --nav-glow-angle: 360deg;
+  }
+  100% {
+    opacity: 0;
+    --nav-glow-angle: 540deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav.nav-glow::after {
+    animation: none;
+    opacity: 0;
   }
 }

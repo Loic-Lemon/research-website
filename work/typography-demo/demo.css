@@ -1,0 +1,64 @@
+/* Throwaway comparison. The original stylesheet and motion remain in every variant. */
+html { scroll-behavior: smooth; }
+body { margin: 0; padding: 0; background: transparent; }
+#demo-site { min-height: 100%; padding-bottom: 108px; background: rgb(var(--background)); color: rgb(var(--foreground)); font-family: var(--font-geist-sans), system-ui, sans-serif; }
+#demo-site main { min-height: 760px; }
+#demo-site a { overflow-wrap: anywhere; }
+#demo-site .site-nav { z-index: 50; }
+#demo-site:not([data-variant="current"]) { --demo-heading: Literata, Georgia, serif; --demo-body: "Source Sans 3", Arial, sans-serif; font-family: var(--demo-body); }
+#demo-site[data-variant="lora"] { --demo-heading: Lora, Georgia, serif; --demo-body: Lato, Arial, sans-serif; }
+#demo-site[data-variant="lato"] { --demo-heading: Lato, Arial, sans-serif; --demo-body: Lato, Arial, sans-serif; }
+#demo-site:not([data-variant="current"]) .font-sans { font-family: var(--demo-body); }
+#demo-site:not([data-variant="current"]) .font-serif { font-family: var(--demo-heading); }
+#demo-site:not([data-variant="current"]) h1 { font-family: var(--demo-heading); font-size: 34px; line-height: 1.16; font-weight: 400; letter-spacing: 0; }
+#demo-site:not([data-variant="current"]) h1 ~ p.uppercase { text-transform: none; letter-spacing: 0; font-size: 14px; }
+#demo-site:not([data-variant="current"]) h1 + p { opacity: 1; color: rgb(var(--muted)); font-size: 13px; }
+#demo-site:not([data-variant="current"]) h2 { font-family: var(--demo-heading); font-size: 24px; line-height: 1.25; font-weight: 400; letter-spacing: 0; text-transform: none; border-color: rgb(var(--border)); padding-bottom: 8px; margin-bottom: 24px; }
+#demo-site[data-variant="lora"] h2 { font-weight: 500; }
+#demo-site[data-variant="lato"] h2 { font-weight: 700; }
+#demo-site:not([data-variant="current"]) .site-nav nav button { font-style: normal; font-size: 15px; }
+#demo-site:not([data-variant="current"]) #about > div,
+#demo-site:not([data-variant="current"]) #my-research > div,
+#demo-site:not([data-variant="current"]) #my-research > p { font-size: 17px; line-height: 1.65; }
+#demo-site:not([data-variant="current"]) #about strong { font-weight: 400; }
+#demo-site:not([data-variant="current"]) #about > div > p > strong:first-child,
+#demo-site:not([data-variant="current"]) #about a strong { font-weight: 600; }
+#demo-site:not([data-variant="current"]) #about li[style] { color: inherit !important; }
+#demo-site:not([data-variant="current"]) #about a,
+#demo-site:not([data-variant="current"]) section p a { color: rgb(var(--accent)); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+#demo-site:not([data-variant="current"]) #recent-highlights .tracking-wider,
+#demo-site:not([data-variant="current"]) #publications .tracking-wider { letter-spacing: 0; text-transform: none; color: rgb(var(--muted)); font-weight: 400; }
+#demo-site:not([data-variant="current"]) figcaption { font-size: 14px; line-height: 1.5; }
+#demo-site:not([data-variant="current"]) .opacity-30,
+#demo-site:not([data-variant="current"]) .opacity-35 { opacity: 1; }
+/* Item roles share one family across highlights, publications, projects and timeline. */
+#demo-site:not([data-variant="before"]) .demo-item { font-family: var(--demo-body); }
+#demo-site:not([data-variant="before"]) .demo-item-title { font-family: var(--demo-body); font-size: 16px; line-height: 1.5; font-weight: 600; font-style: normal; letter-spacing: 0; color: rgb(var(--foreground)); margin-bottom: 6px; }
+#demo-site:not([data-variant="before"]) .demo-item-title a { font: inherit; color: inherit; }
+#demo-site:not([data-variant="before"]) .demo-item-body { font-family: var(--demo-body); font-size: 16px; line-height: 1.625; font-weight: 400; font-style: normal; color: rgb(var(--foreground) / .9); margin-bottom: 0; }
+#demo-site:not([data-variant="before"]) .demo-item-body li,
+#demo-site:not([data-variant="before"]) .demo-item-body li span { font-family: inherit; font-size: inherit; font-style: normal; }
+#demo-site:not([data-variant="before"]) .demo-item-meta,
+#demo-site:not([data-variant="before"]) .demo-item-meta span,
+#demo-site:not([data-variant="before"]) .demo-item-meta b { font-family: var(--demo-body); font-size: 14px; line-height: 1.5; font-weight: 400; font-style: normal; letter-spacing: 0; text-transform: none; color: rgb(var(--muted)); }
+#demo-site:not([data-variant="before"]) .demo-item-meta { margin-bottom: 6px; }
+#demo-site:is([data-variant="lora"], [data-variant="lato"]) .demo-item-title { font-weight: 700; }
+#demo-toolbar { position: fixed; z-index: 100; bottom: max(14px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100% - 24px); padding: 10px 12px; border: 1px solid #d4d4d4; border-radius: 12px; background: #fff; color: #242424; box-shadow: 0 5px 28px #0002; font: 13px/1.35 Arial, Helvetica, sans-serif; }
+#demo-toolbar .demo-options { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px; }
+#demo-toolbar button { border: 0; border-radius: 5px; background: transparent; color: #505050; padding: 8px 12px; white-space: nowrap; font: inherit; cursor: pointer; }
+#demo-toolbar button[aria-pressed="true"] { background: #252525; color: #fff; }
+#demo-toolbar button:hover { background: #eee; color: #222; }
+#demo-toolbar button[aria-pressed="true"]:hover { background: #252525; color: #fff; }
+#demo-toolbar button:focus-visible { outline: 2px solid #194bd2; outline-offset: 2px; }
+#demo-toolbar .demo-caption { display: block; text-align: center; margin-top: 7px; color: #656565; font-size: 11px; }
+#demo-toolbar .demo-note { display: block; text-align: center; margin-top: 3px; color: #656565; font-size: 11px; }
+#demo-toolbar .demo-arrow { padding: 8px; }
+#demo-toast { position: fixed; z-index: 101; left: 50%; bottom: 112px; transform: translateX(-50%); max-width: calc(100% - 40px); background: #252525; color: #fff; border-radius: 7px; padding: 9px 14px; font: 13px/1.5 Arial, sans-serif; }
+#demo-toast[hidden] { display: none; }
+@media (max-width: 600px) {
+  #demo-toolbar { padding: 8px; }
+  #demo-toolbar button { padding: 8px; }
+  #demo-toolbar .demo-arrow { display: none; }
+  #demo-site:not([data-variant="current"]) h1 { font-size: 30px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

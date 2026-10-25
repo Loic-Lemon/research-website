@@ -1,0 +1,41 @@
+{
+  "captured_at_utc": "2026-10-23T22:34:39Z",
+  "base_commit": "628fa79774ba7d1f9416f4840f9cdbb9e36861e5",
+  "source_state": "Working tree, including uncommitted edits; Lora + Lato is not applied to the live site.",
+  "preferred_preview_variant": "lora",
+  "preview": {
+    "file": "lora-lato.html",
+    "sha256": "c640aebb9199f66006683ccd1e22ef8a79994d382af9dfeef0ed32218464e837",
+    "web_fonts_require_internet": true
+  },
+  "baseline_archive": "current-site-styles.zip",
+  "baseline_files": {
+    "src/app/globals.css": "2877f101c644dcc78613e5201e02e4d5c4d05b5c5bd65f6b2f1b1c255ae32ad7",
+    "src/app/layout.tsx": "419e8988ed4b2b53e62defb8638376cd63ddca274511e22bda6958180f3d9af5",
+    "src/app/not-found.tsx": "1565a95f098ab2cc765724e564f31cfe90bf8262321502b9490f07634195047c",
+    "src/app/page.tsx": "bda0564968f419cdff5058782b959ebad3c715f6df19f58c0df5da852a1e327c",
+    "src/app/research/[slug]/page.tsx": "64538393d7ec59770d475ddf2b6f55d2594390406def8ec3516245ef60e528e8",
+    "src/components/all-news-view.tsx": "e9923cdd04684972d6319fcf2ab4e08f72cd16cffce7f03af1adad074feb6e20",
+    "src/components/award-entry.tsx": "4dbc57204e07c9c297f4c30835023f3bef65647bb7d6b7be0fbac89e0c9de461",
+    "src/components/education-entry.tsx": "9e86912d6b2c377969ab14c586a8426523f3b41bbefbfba9e573c562e0c558d0",
+    "src/components/experience-entry.tsx": "eb8f3d58ba6fd5b528bd3f1e63b5d97be55762749eb977f475a996ff621e8c11",
+    "src/components/extra/extra-award-block.tsx": "1376573c5663c90ea6cbb7f9421ea178c9791c8e46546dc2ddcc408f0eedaa91",
+    "src/components/extra/extra-bio-block.tsx": "84d1f081e29ed87910fc019d11c90be7a9141863a330001cd84dfc7c8a35377d",
+    "src/components/extra/extra-gallery-block.tsx": "de3ee19b4a010dc70855a1baed9f0f5c5601b44d1435ef24f1bbc42ade640fdb",
+    "src/components/extra/extra-image-block.tsx": "03191670614ab98b2630b751fc7cfa76084e9759811b32481971dcda7ba39c87",
+    "src/components/extra/extra-typing-racer.tsx": "378c71ee9f64b5ae3a8ff9d96f3a5856f5c58e7750f2bc53b27ede7c614001a4",
+    "src/components/extra/index.tsx": "81e2317e5946d19d2a6bd74ef55133cc06ef2caab39157f06d8899969662bfc5",
+    "src/components/image-gallery.tsx": "5596ce09f53d5a31be91664a981d7d8c0da1b4c3f6600a4d8a47a24766d254db",
+    "src/components/nav-bar.tsx": "9551c21616e5b8fe9fadae7fef2a42a710300f707b670034222e8e8f9a82baef",
+    "src/components/news-entry.tsx": "f265053f4695b4b8c1e6cc448fe4b72bcac96dc1a6f649e0074480671cbd5f44",
+    "src/components/page-contents.tsx": "8c703eae643c7346ffd278bbbed5f490d49edf9d8c92a37ba280826e6ab19667",
+    "src/components/page-progress.tsx": "c02f91d6cd873e44b47112663b92315d5164c271e4476f8a6fa9da68d598c518",
+    "src/components/portfolio-entry.tsx": "0a9cdbaef323a80b11b7fb20348720f96544f3b0f371f116040623fbdb1ba418",
+    "src/components/profile-section.tsx": "43bf672d1cdc197af5bf4e2018a2b840b14656d93f6e9d23891e2c514fc210f5",
+    "src/components/project-detail.tsx": "2a690e0a0da78d300f614365cf83c14fe1d96a76d68fcc16ec1f1d3cefdbd07f",
+    "src/components/publication-entry.tsx": "6ea1942eb1351135f6569bacf5aa9ef531b0c4bb0ced90a59d75ccee3910e037",
+    "src/components/theme-toggle.tsx": "970b848ae58c2dca38b2a9549656c8adce7e99a4ef1714e99c008c174f6455af",
+    "tailwind.config.ts": "c2929bd81440c7578f31720925d87987e7e6f34b280d0f9de6db6f8abbf9481a",
+    "src/data/aboutme.ts": "7ffbac654d71c6818b0f1452396ecc47dcac037d7ca6fa374a9c5a072e074fd5"
+  }
+}

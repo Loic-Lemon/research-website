@@ -1,0 +1,132 @@
+<style>
+#page-outline-preview { --site-bg:light-dark(#fffcf8,#16181c); --site-ink:light-dark(#0f0f0f,#e8ebf0); --site-muted:light-dark(#65656b,#a8aeb8); --site-line:light-dark(#dedbd6,#343942); --site-accent:light-dark(#194bd2,#8cb0e0); color-scheme:light dark; }
+#page-outline-preview .site { padding:16px; border:1px solid var(--site-line); border-radius:12px; background:var(--site-bg); color:var(--site-ink); font:14px/1.65 Arial,sans-serif; }
+#page-outline-preview .site * { box-sizing:border-box; }
+#page-outline-preview .site [hidden] { display:none!important; }
+#page-outline-preview .site button, #page-outline-preview .site a { color:inherit; font:inherit; }
+#page-outline-preview .site a { text-decoration:none; }
+#page-outline-preview .site a:hover { color:var(--site-accent); }
+#page-outline-preview .global-nav { display:flex; justify-content:center; flex-wrap:wrap; gap:18px; padding:0 0 12px; border-bottom:1px solid var(--site-line); color:var(--site-muted); font-style:italic; }
+#page-outline-preview .global-nav .selected { color:var(--site-accent); text-decoration:underline; }
+#page-outline-preview .viewport { height:490px; overflow:auto; scrollbar-width:thin; position:relative; }
+#page-outline-preview .page-grid { display:grid; grid-template-columns:140px minmax(0,1fr); gap:26px; padding:18px 48px 40px 6px; }
+#page-outline-preview .profile img { width:94px; height:126px; object-fit:cover; border-radius:8px; }
+#page-outline-preview .profile-name { font:24px/1.15 Georgia,serif; margin:18px 0 12px; }
+#page-outline-preview .profile-meta { color:var(--site-muted); font-size:11px; letter-spacing:.04em; text-transform:uppercase; }
+#page-outline-preview .profile-contact { margin-top:18px; font-size:11px; color:var(--site-muted); overflow-wrap:anywhere; }
+#page-outline-preview .article { min-width:0; }
+#page-outline-preview .outline { position:sticky; top:0; z-index:2; padding:10px 0 12px; margin:0 0 24px; border-bottom:1px solid var(--site-line); background:var(--site-bg); }
+#page-outline-preview .outline-label { display:block; font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--site-muted); }
+#page-outline-preview .outline-links { display:flex; flex-wrap:wrap; column-gap:20px; row-gap:3px; margin-top:5px; font-size:12px; }
+#page-outline-preview .outline a { display:inline-flex; align-items:center; min-height:24px; color:var(--site-muted); }
+#page-outline-preview .outline a[aria-current] { color:var(--site-accent); text-decoration:underline; text-underline-offset:4px; }
+#page-outline-preview .outline summary { display:flex; align-items:center; gap:10px; min-height:30px; list-style:none; }
+#page-outline-preview .outline summary::-webkit-details-marker { display:none; }
+#page-outline-preview .outline .count { font-size:11px; color:var(--site-muted); }
+#page-outline-preview .outline .chevron { margin-left:auto; font-size:14px; color:var(--site-muted); }
+#page-outline-preview .outline details[open] .chevron { transform:rotate(180deg); }
+#page-outline-preview .outline .folded-links { display:flex; flex-direction:column; padding-top:8px; gap:4px; }
+#page-outline-preview .body-section { margin-bottom:36px; }
+#page-outline-preview .body-section p { margin:0 0 12px; }
+#page-outline-preview .site h2 { font:500 17px/1.4 Georgia,serif; text-transform:uppercase; border-bottom:1px solid var(--site-ink); padding-bottom:3px; margin:0 0 20px; }
+#page-outline-preview .date { color:var(--site-accent); font-size:11px; letter-spacing:.03em; text-transform:uppercase; }
+#page-outline-preview .news-title { margin:4px 0 7px; font-weight:500; }
+#page-outline-preview .news-copy { color:var(--site-muted); font-size:12px; }
+#page-outline-preview .rail { position:sticky; top:170px; height:0; float:right; margin-right:0; z-index:3; }
+#page-outline-preview .rail span { display:block; width:8px; height:1px; margin-bottom:11px; background:var(--site-ink); opacity:.2; }
+#page-outline-preview .rail span:nth-child(5) { width:20px; opacity:.85; }
+#page-outline-preview .rail span:nth-child(4), #page-outline-preview .rail span:nth-child(6) { width:13px; opacity:.45; }
+@media(max-width:560px) {
+#page-outline-preview .site { padding:16px; }
+#page-outline-preview .global-nav { gap:16px; font-size:12px; }
+#page-outline-preview .global-nav .secondary { display:none; }
+#page-outline-preview .page-grid { display:flex; flex-direction:column; gap:0; padding:6px 0 24px; }
+#page-outline-preview .article { display:contents; }
+#page-outline-preview .outline { order:-2; }
+#page-outline-preview .profile { order:-1; display:grid; grid-template-columns:52px 1fr; column-gap:14px; margin:0 0 28px; align-items:center; }
+#page-outline-preview .profile img { grid-row:span 2; width:52px; height:70px; }
+#page-outline-preview .profile-name { font-size:20px; margin:0 0 4px; }
+#page-outline-preview .profile-meta { font-size:11px; }
+#page-outline-preview .profile-contact, #page-outline-preview .rail { display:none; }
+#page-outline-preview .outline-links { column-gap:16px; }
+#page-outline-preview .outline a { min-height:40px; }
+#page-outline-preview .viewport { height:490px; }
+}
+</style>
+<div id="page-outline-preview">
+  <div class="viz-carousel" aria-label="Page contents placement">
+    <section data-variant="Visible links" aria-label="Visible page links">
+      <div class="site" data-outline="visible"></div>
+    </section>
+    <section data-variant="Collapsible outline" aria-label="Collapsible page outline" hidden>
+      <div class="site" data-outline="collapsible"></div>
+    </section>
+  </div>
+  <template id="outline-site-template">
+    <nav class="global-nav" aria-label="Website pages">
+      <span class="selected">Start</span><span>Research</span><span>Publications</span><span class="secondary">Timeline</span><span class="secondary">Awards</span><span class="secondary">Extra</span>
+    </nav>
+    <div class="viewport" aria-label="Start page preview">
+      <aside class="rail" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></aside>
+      <div class="page-grid">
+        <aside class="profile">
+          <img src="/Users/loic/Documents/Code/research-website/work/outline-avatar.webp" alt="Loic Lorente Lemoine">
+          <div class="profile-name">Loic Lorente<br>Lemoine</div>
+          <div class="profile-meta">PhD CompSci<br>Cardiff University</div>
+          <div class="profile-contact">Cardiff University<br>AGILE Lab</div>
+        </aside>
+        <div class="article">
+          <nav class="outline" aria-label="On this page"></nav>
+          <section class="body-section" data-anchor="about">
+            <p>I'm Loic, a PhD student in the School of Computer Science and Informatics at Cardiff University and the AGILE Lab.</p>
+            <p>I completed my BSc and MPhil at Cardiff University. I am now pursuing a PhD under the supervision of Dr Nick Pham.</p>
+          </section>
+          <section class="body-section" data-anchor="research">
+            <h2>My Research</h2>
+            <p>My research focuses on systems for human sensing, including machine learning and edge computing.</p>
+            <p>My current PhD explores continuous stress quantification and monitoring on wearable devices.</p>
+          </section>
+          <section class="body-section" data-anchor="highlights">
+            <h2>Recent Highlights</h2>
+            <div class="date">May 2026 · Award</div>
+            <div class="news-title">ASSET'26 and Mobisys Scholarship</div>
+            <p class="news-copy">Accepted into the ASSET'26 Symposium, with a scholarship to attend ACM Mobisys in Cambridge.</p>
+            <div class="date">April 2026 · Publication</div>
+            <div class="news-title">Workshop Paper @ Mobisys'26</div>
+            <p class="news-copy">Personalised seizure prediction research accepted at EIFCOM.</p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </template>
+</div>
+<script>
+(() => {
+  const root = document.getElementById('page-outline-preview');
+  const template = document.getElementById('outline-site-template');
+  const linkMarkup = '<a class="cursor-interaction" href="#about" data-go="about" aria-current="location">About</a><a class="cursor-interaction" href="#research" data-go="research">My Research</a><a class="cursor-interaction" href="#highlights" data-go="highlights">Recent Highlights</a>';
+  root.querySelectorAll('.site').forEach(site => {
+    site.append(template.content.cloneNode(true));
+    const outline = site.querySelector('.outline');
+    if (site.dataset.outline === 'visible') {
+      outline.innerHTML = '<span class="outline-label">On this page</span><div class="outline-links">' + linkMarkup + '</div>';
+    } else {
+      outline.innerHTML = '<details><summary class="cursor-interaction"><span class="outline-label">On this page</span><span class="count">3 sections</span><span class="chevron" aria-hidden="true">⌄</span></summary><div class="folded-links">' + linkMarkup + '</div></details>';
+    }
+    outline.querySelectorAll('a').forEach(link => {
+      console.assert(site.querySelector('[data-anchor="' + link.dataset.go + '"]'), 'Outline target exists');
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const details = outline.querySelector('details');
+        if (details) details.open = false;
+        const viewport = site.querySelector('.viewport');
+        const target = site.querySelector('[data-anchor="' + link.dataset.go + '"]');
+        const top = target.getBoundingClientRect().top - viewport.getBoundingClientRect().top + viewport.scrollTop - outline.offsetHeight - 12;
+        viewport.scrollTo({top:Math.max(0,top),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
+        outline.querySelectorAll('a').forEach(item => item.removeAttribute('aria-current'));
+        link.setAttribute('aria-current','location');
+      });
+    });
+  });
+})();
+</script>

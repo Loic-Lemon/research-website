@@ -4,7 +4,7 @@ import { getIcon } from "@/lib/icon-map";
 export function AwardEntry({ award }: { award: Award }) {
   const Icon = getIcon(award.icon);
   return (
-    <div>
+    <div data-toc-year={award.year}>
       <div className="flex items-center gap-2 mb-2">
         {Icon && <Icon size={14} className="text-muted shrink-0" />}
         <span className="text-sm font-semibold text-accent uppercase tracking-wider">{award.year}</span>

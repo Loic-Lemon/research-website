@@ -19,11 +19,13 @@ import { extraBlocks } from "@/data/extra";
 import { ExtraSection } from "@/components/extra";
 import { ProjectDetail } from "@/components/project-detail";
 import { AllNewsView } from "@/components/all-news-view";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { ExtraTypingRacer } from "@/components/extra/extra-typing-racer";
+import { ArrowUpRight } from "lucide-react";
 import { useState, useCallback, useRef, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { NavBar } from "@/components/nav-bar";
+import { PageContents } from "@/components/page-contents";
+import Image from "next/image";
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -43,6 +45,7 @@ function HomeContent() {
   const [transitionState, setTransitionState] = useState<'idle' | 'exiting' | 'entering'>('idle');
   const isTransitioning = useRef(false);
   const [showSecretGame, setShowSecretGame] = useState(false);
+  const pageContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
@@ -65,9 +68,17 @@ function HomeContent() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
+  const scrollToTop = useCallback(() => {
+    if (window.scrollY <= 0) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'instant' : 'smooth' });
+  }, []);
+
   const navigateTo = useCallback((section: Section | null, projectSlug?: string) => {
     if (isTransitioning.current) return;
     isTransitioning.current = true;
+
+    scrollToTop();
 
     const params = new URLSearchParams(window.location.search);
     if (section) {
@@ -88,6 +99,9 @@ function HomeContent() {
     setTransitionState('exiting');
 
     setTimeout(() => {
+      setShowAllNewsView(false);
+      setNewsViewTransition('idle');
+      isNewsViewTransitioning.current = false;
       setSelectedSection(section);
       if (section === Section.Portfolio && projectSlug) {
         setSelectedProject(portfolioData.find((p) => p.slug === projectSlug) ?? null);
@@ -101,11 +115,13 @@ function HomeContent() {
         isTransitioning.current = false;
       }, 300);
     }, 150);
-  }, []);
+  }, [scrollToTop]);
 
   const closeProject = useCallback(() => {
     if (isTransitioning.current) return;
     isTransitioning.current = true;
+
+    scrollToTop();
 
     const params = new URLSearchParams(window.location.search);
     params.set("section", Section.Portfolio);
@@ -126,7 +142,7 @@ function HomeContent() {
         isTransitioning.current = false;
       }, 300);
     }, 150);
-  }, []);
+  }, [scrollToTop]);
 
   // Helper to render the selected section
   const renderSection = () => {
@@ -156,21 +172,57 @@ function HomeContent() {
       }
 
       return (
-        <div className={`${newsViewTransition === 'exiting' ? 'animate-fade-out-up' : ''} space-y-12`}>
+        <div className={`${newsViewTransition === 'exiting' ? 'animate-fade-out-up' : ''} section-stack`}>
           {aboutMe.description && (
-            <section>
+            <section id="about" data-toc-label="Intro">
               <div
                 className="text-base leading-relaxed text-foreground/90 [&_a]:underline [&_a]:text-foreground [&_a:hover]:text-muted"
                 dangerouslySetInnerHTML={{ __html: aboutMe.description }}
               />
             </section>
           )}
+          {aboutMe.researchDescription && (
+            <section id="my-research" aria-labelledby="my-research-heading">
+              <h2 id="my-research-heading" className="section-heading font-serif font-bold text-xl tracking-wide uppercase">
+                My Research
+              </h2>
+              <div
+                className="text-base leading-relaxed text-foreground/90 [&_a]:underline [&_a]:text-foreground [&_a:hover]:text-muted"
+                dangerouslySetInnerHTML={{ __html: aboutMe.researchDescription }}
+              />
+              {aboutMe.researchImage && (
+                <figure className="mt-6">
+                  <Image
+                    src={aboutMe.researchImage}
+                    alt="Loic as a cartoon caveman being chased by a saber-toothed tiger"
+                    className="mx-auto aspect-[1.97] h-auto w-[85%] rounded-xl object-cover shadow-md"
+                    sizes="(max-width: 899px) calc(85vw - 54.4px), (max-width: 1024px) 54vw, 540px"
+                  />
+                  <figcaption className="text-center text-sm text-muted mt-1 italic">
+                    Image: Depiction of when stress helped us survive life or death situations.
+                  </figcaption>
+                </figure>
+              )}
+              {aboutMe.researchConclusion && (
+                <>
+                  <p
+                    className="mt-6 text-base leading-relaxed text-foreground/90"
+                    dangerouslySetInnerHTML={{ __html: aboutMe.researchConclusion }}
+                  />
+                  <div className="mt-5 text-center">
+                    <p aria-hidden="true" className="tracking-[0.75em] text-foreground/[0.35]">· · ·</p>
+                    <p className="mt-1 text-xs italic text-muted/80">Still being filled in</p>
+                  </div>
+                </>
+              )}
+            </section>
+          )}
           {newsData.length > 0 && (
             <section id="recent-highlights">
-              <h2 className="font-serif font-bold text-xl mb-8 tracking-wide uppercase border-b border-foreground">
+              <h2 className="section-heading font-serif font-bold text-xl tracking-wide uppercase">
                 Recent Highlights
               </h2>
-              <div className="space-y-6 [&>*+*]:item-separator [&>*+*]:pt-6">
+              <div className="space-y-4 [&>*+*]:item-separator [&>*+*]:pt-4">
                 {newsData.slice(0, 4).map((news, index) => (
                   <NewsEntry key={index} news={news} />
                 ))}
@@ -192,9 +244,10 @@ function HomeContent() {
                         }, 300);
                       }, 150);
                     }}
-                    className="text-base text-muted italic hover:text-accent bg-transparent border-none p-0 cursor-pointer opacity-30"
+                    className="btn-chip"
                   >
-                    Show more →
+                    <ArrowUpRight size={11} />
+                    <span>Show more</span>
                   </button>
                 </div>
               )}
@@ -209,10 +262,10 @@ function HomeContent() {
         return (
           newsData.length > 0 && (
             <section id="recent-highlights">
-              <h2 className="font-serif font-bold text-xl mb-8 tracking-wide uppercase border-b border-foreground">
+              <h2 className="section-heading font-serif font-bold text-xl tracking-wide uppercase">
                 Recent Highlights
               </h2>
-              <div className="space-y-6 [&>*+*]:item-separator [&>*+*]:pt-6">
+              <div className="space-y-4 [&>*+*]:item-separator [&>*+*]:pt-4">
                 {newsData.map((news, index) => (
                   <NewsEntry key={index} news={news} />
                 ))}
@@ -225,17 +278,22 @@ function HomeContent() {
         );
       case Section.Timeline:
         return (
-          (educationData.length > 0 || experienceData.length > 0) && (
+          (aboutMe.backgroundDescription || educationData.length > 0 || experienceData.length > 0) && (
             <section id="timeline">
-              <p className="text-sm text-muted mb-4 leading-relaxed">
-                My academic and professional timeline.
-              </p>
+              {aboutMe.backgroundDescription && (
+                <div
+                  id="background-introduction"
+                  data-toc-label="Intro"
+                  className="text-base leading-relaxed text-foreground/90 [&_a]:underline [&_a]:text-foreground [&_a:hover]:text-muted"
+                  dangerouslySetInnerHTML={{ __html: aboutMe.backgroundDescription }}
+                />
+              )}
               {educationData.length > 0 && (
                 <>
-                  <h2 className="font-serif font-bold text-xl mb-8 tracking-wide uppercase border-b border-foreground">
+                  <h2 className="section-heading font-serif font-bold text-xl tracking-wide uppercase">
                     Education
                   </h2>
-                  <div className="space-y-6 [&>*+*]:item-separator [&>*+*]:pt-6">
+                  <div className="space-y-4 [&>*+*]:item-separator [&>*+*]:pt-4">
                     {educationData.map((education, index) => (
                       <EducationEntry key={index} education={education} />
                     ))}
@@ -244,10 +302,10 @@ function HomeContent() {
               )}
               {experienceData.length > 0 && (
                 <>
-                  <h2 className="font-serif font-bold text-xl mb-8 mt-12 tracking-wide uppercase border-b border-foreground">
+                  <h2 className="section-heading font-serif font-bold text-xl tracking-wide uppercase">
                     Experience
                   </h2>
-                  <div className="space-y-6 [&>*+*]:item-separator [&>*+*]:pt-6">
+                  <div className="space-y-4 [&>*+*]:item-separator [&>*+*]:pt-4">
                     {experienceData.map((experience, index) => (
                       <ExperienceEntry key={index} experience={experience} />
                     ))}
@@ -261,18 +319,18 @@ function HomeContent() {
         return (
           publicationData.length > 0 && (
             <section id="publications">
-              <p className="text-sm text-muted mb-4 leading-relaxed">
+              <p className="text-sm text-muted leading-relaxed">
                 A list of my published works.
               </p>
-              <div className="flex justify-between items-baseline mb-8 border-b border-foreground">
+              <div className="section-heading flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 pb-2">
                 <h2 className="font-serif font-bold text-xl tracking-wide uppercase">
                   Publications
                 </h2>
-                <p className="text-base text-muted italic opacity-35 shrink-0">
+                <p className="text-sm text-muted">
                   * means co-first author
                 </p>
               </div>
-              <div className="space-y-6 [&>*+*]:item-separator [&>*+*]:pt-6">
+              <div data-toc-group="years" className="space-y-4 [&>*+*]:item-separator [&>*+*]:pt-4">
                 {publicationData.map((publication, index) => (
                   <PublicationEntry key={index} publication={publication} />
                 ))}
@@ -290,15 +348,15 @@ function HomeContent() {
         return (
           portfolioData.length > 0 && (
             <section id="research">
-              <p className="text-sm text-muted mb-4 leading-relaxed">
+              <p className="text-sm text-muted leading-relaxed">
                 A collection of previous and ongoing research projects.
               </p>
-              <h2 className="font-serif font-bold text-xl mb-8 tracking-wide uppercase border-b border-foreground">
+              <h2 className="section-heading font-serif font-bold text-xl tracking-wide uppercase">
                 Research
               </h2>
-              <div className="space-y-6 [&>*+*]:item-separator [&>*+*]:pt-6">
+              <div className="space-y-4 [&>*+*]:item-separator [&>*+*]:pt-4">
                 {portfolioData.map((portfolio, index) => (
-                  <PortfolioEntry key={index} index={index} portfolio={portfolio} onProjectClick={(slug) => { window.scrollTo({ top: 0, behavior: 'smooth' }); navigateTo(Section.Portfolio, slug); }} />
+                  <PortfolioEntry key={index} index={index} portfolio={portfolio} onProjectClick={(slug) => navigateTo(Section.Portfolio, slug)} />
                 ))}
               </div>
             </section>
@@ -308,13 +366,13 @@ function HomeContent() {
         return (
           awardData.length > 0 && (
             <section id="awards">
-              <p className="text-sm text-muted mb-4 leading-relaxed">
+              <p className="text-sm text-muted leading-relaxed">
                 A list of honours, scholarships, and any recognitions.
               </p>
-              <h2 className="font-serif font-bold text-xl mb-8 tracking-wide uppercase border-b border-foreground">
+              <h2 className="section-heading font-serif font-bold text-xl tracking-wide uppercase">
                 Awards
               </h2>
-              <div className="space-y-6 [&>*+*]:item-separator [&>*+*]:pt-6">
+              <div data-toc-group="years" className="space-y-4 [&>*+*]:item-separator [&>*+*]:pt-4">
                 {awardData.map((award, index) => (
                   <AwardEntry key={index} award={award} />
                 ))}
@@ -337,33 +395,29 @@ function HomeContent() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Top-left theme toggle */}
-      <div className="fixed left-4 top-3 z-[60] hidden md:block opacity-50 hover:opacity-100 transition-opacity duration-300">
-        <ThemeToggle />
-      </div>
-
       <NavBar activeSection={selectedSection} onNavigate={navigateTo} />
       <div className="max-w-screen-lg mx-auto px-8 py-28">
         {/* Grid Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-2">
+        <div className="flex flex-col md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-2">
           {/* Left Column - Fixed Info */}
-          <div className="space-y-12 mb-8 md:mb-0">
-            {/* Profile */}
-            <div className="">
-              <div className="">
-              </div>
-              <ProfileSection aboutMe={aboutMe} />
-            </div>
+          <div className="mb-8 md:mb-0">
+            <ProfileSection aboutMe={aboutMe} />
           </div>
           {/* Right Column - Scrolling Content */}
-          <div>
-            {showSecretGame ? (
-              <ExtraTypingRacer onBack={() => setShowSecretGame(false)} />
-            ) : (
-              <div className={`${transitionState === 'exiting' ? 'animate-fade-out-up' : transitionState === 'entering' ? 'animate-fade-in-up' : ''} ${selectedSection === null ? 'space-y-12' : ''}`}>
-                {renderSection()}
-              </div>
-            )}
+          <div className="contents md:block">
+            <PageContents
+              key={`${selectedSection}-${selectedProject?.slug}-${showAllNewsView}-${showSecretGame}`}
+              contentRef={pageContentRef}
+            />
+            <div ref={pageContentRef} className="[&_[id]]:scroll-mt-[var(--page-contents-clearance,7rem)]">
+              {showSecretGame ? (
+                <ExtraTypingRacer onBack={() => setShowSecretGame(false)} />
+              ) : (
+                <div className={transitionState === 'exiting' ? 'animate-fade-out-up' : transitionState === 'entering' ? 'animate-fade-in-up' : ''}>
+                  {renderSection()}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

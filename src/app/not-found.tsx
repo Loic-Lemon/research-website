@@ -6,10 +6,10 @@ import { Section } from "@/data/section-order";
 import { useState, useCallback } from "react";
 
 const quickLinks = [
-  { label: "Start", section: null },
+  { label: "Home", section: null },
   { label: "Research", section: Section.Portfolio },
   { label: "Publications", section: Section.Publication },
-  { label: "Timeline", section: Section.Timeline },
+  { label: "Background", section: Section.Timeline },
   { label: "Awards", section: Section.Award },
 ];
 
@@ -72,15 +72,12 @@ export default function NotFound() {
       </div>
       <div className="max-w-screen-lg mx-auto px-8 py-28">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
-          <div className="col-span-12 md:col-span-4 space-y-12 mb-8 md:mb-0">
-            <div className="">
-              <div className=""></div>
-              <ProfileSection aboutMe={aboutMe} />
-            </div>
+          <div className="col-span-12 md:col-span-4 mb-8 md:mb-0">
+            <ProfileSection aboutMe={aboutMe} />
           </div>
           <div className="col-span-12 md:col-span-7 md:col-start-6 space-y-12">
             <section>
-              <h2 className="font-serif font-bold text-xl mb-6 tracking-wide uppercase border-b border-foreground">
+              <h2 className="section-heading font-serif font-bold text-xl tracking-wide uppercase">
                 Page Not Found
               </h2>
               <p className="font-serif text-base leading-relaxed text-foreground">

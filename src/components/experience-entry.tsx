@@ -2,9 +2,9 @@ import { Experience } from "@/data/experience";
 
 export function ExperienceEntry({ experience }: { experience: Experience }) {
   return (
-    <div className="grid grid-cols-4 gap-x-2">
-      <span className="text-sm text-accent mt-1">{experience.date}</span>
-      <div className="col-span-3 flex flex-col">
+    <div className="grid gap-y-2 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-x-4">
+      <span className="self-start whitespace-nowrap text-sm font-medium tabular-nums text-accent sm:pt-1">{experience.date}</span>
+      <div className="flex min-w-0 flex-col">
         <h3 className="text-lg font-serif">
           {experience.title} —{" "}
           {experience.companyUrl ? (

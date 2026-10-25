@@ -5,11 +5,14 @@ import { Section } from "@/data/section-order";
 import { ProfileSection } from "@/components/profile-section";
 import { aboutMe } from "@/data/aboutme";
 import { ProjectDetail } from "@/components/project-detail";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { NavBar } from "@/components/nav-bar";
 import Link from "next/link";
+import { useRef } from "react";
+import { PageContents } from "@/components/page-contents";
+import { ArrowLeft } from "lucide-react";
 
 export default function ProjectPage() {
+  const pageContentRef = useRef<HTMLDivElement>(null);
   const params = useParams();
   const slug = params.slug as string;
   const project = portfolioData.find((p) => p.slug === slug);
@@ -21,9 +24,10 @@ export default function ProjectPage() {
           <p className="text-muted text-lg">Project not found.</p>
           <Link
             href="/?section=portfolio"
-            className="text-sm text-muted hover:text-foreground underline transition-colors"
+            className="btn-chip"
           >
-            ← Back to Research
+            <ArrowLeft size={12} data-back />
+            <span>Back to Research</span>
           </Link>
         </div>
       </div>
@@ -32,17 +36,17 @@ export default function ProjectPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="fixed left-4 top-3 z-[60] hidden md:block opacity-50 hover:opacity-100 transition-opacity duration-300">
-        <ThemeToggle />
-      </div>
       <NavBar activeSection={Section.Portfolio} />
       <div className="max-w-screen-lg mx-auto px-8 py-28">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-2">
-          <div className="col-span-12 md:col-span-4 space-y-12 mb-8 md:mb-0">
+        <div className="flex flex-col md:grid md:grid-cols-12 gap-2">
+          <div className="col-span-12 md:col-span-4 mb-8 md:mb-0">
             <ProfileSection aboutMe={aboutMe} />
           </div>
-          <div className="col-span-12 md:col-span-7 md:col-start-6">
-            <ProjectDetail project={project} />
+          <div className="contents md:col-span-7 md:col-start-6 md:block">
+            <PageContents key={slug} contentRef={pageContentRef} />
+            <div ref={pageContentRef} className="[&_[id]]:scroll-mt-[var(--page-contents-clearance,7rem)]">
+              <ProjectDetail project={project} />
+            </div>
           </div>
         </div>
       </div>
