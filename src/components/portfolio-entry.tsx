@@ -1,44 +1,17 @@
-import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, FlaskConical, Maximize2, X } from "lucide-react";
+import { ArrowUpRight, FlaskConical } from "lucide-react";
 import { Portfolio } from "@/data/portfolio";
+import { ImagePreview } from "@/components/image-preview";
 import { DISABLED_LINK_CLASSES, DISABLED_LINK_ICON_CLASSES } from "@/lib/constants";
 
 export function PortfolioEntry({ index, portfolio, onProjectClick }: { index: number; portfolio: Portfolio; onProjectClick?: (slug: string) => void }) {
-  const [showPreview, setShowPreview] = useState(false);
-  const [previewMounted, setPreviewMounted] = useState(false);
   const linkedDescription = portfolio.description?.match(/^(.*?)<a href="(\/?\?section=publication)">([^<]+)<\/a>(.*)$/);
 
   return (
     <>
-      <article className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-6">
+      <article className="flex flex-col gap-4 sm:flex-row sm:gap-6">
         {portfolio.imageUrl ? (
-          <button
-            type="button"
-            aria-label={`${showPreview ? "Hide" : "Show"} image preview for ${portfolio.title}`}
-            aria-expanded={showPreview}
-            className="group relative aspect-[4/3] w-full shrink-0 cursor-zoom-in overflow-hidden rounded-lg bg-surface-2 sm:w-52"
-            onClick={() => {
-              if (showPreview) {
-                setShowPreview(false);
-              } else {
-                setPreviewMounted(true);
-                setShowPreview(true);
-              }
-            }}
-          >
-            <Image
-              src={portfolio.imageUrl}
-              alt=""
-              fill
-              sizes="(max-width: 640px) 100vw, 208px"
-              className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-            />
-            <span aria-hidden="true" className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-background/85 text-foreground shadow-sm backdrop-blur-sm transition-colors group-hover:bg-background">
-              <Maximize2 size={15} />
-            </span>
-          </button>
+          <ImagePreview image={portfolio.imageUrl} title={portfolio.title} />
         ) : (
           <div
             aria-hidden="true"
@@ -97,36 +70,6 @@ export function PortfolioEntry({ index, portfolio, onProjectClick }: { index: nu
           )}
         </div>
 
-        {portfolio.imageUrl && previewMounted && (
-          <div
-            className={`${showPreview ? "animate-lightbox-in" : "animate-lightbox-out"} w-full basis-full rounded-xl border border-border bg-surface p-3 sm:p-4`}
-            onAnimationEnd={() => {
-              if (!showPreview) setPreviewMounted(false);
-            }}
-          >
-            <div className="mb-3 flex items-center justify-between gap-4">
-              <span className="text-xs text-muted">Image preview</span>
-              <button
-                type="button"
-                onClick={() => setShowPreview(false)}
-                className="inline-flex min-h-9 items-center gap-2 rounded-md px-2 text-sm text-muted transition-colors hover:bg-surface-2 hover:text-foreground"
-              >
-                <X size={14} />
-                Hide preview
-              </button>
-            </div>
-            <div className="flex justify-center rounded-lg bg-surface-2 p-2 sm:p-4">
-              <Image
-                src={portfolio.imageUrl}
-                alt={portfolio.title}
-                width={1600}
-                height={1200}
-                className="max-h-[65vh] w-auto max-w-full object-contain"
-                sizes="(max-width: 640px) 100vw, 70vw"
-              />
-            </div>
-          </div>
-        )}
       </article>
     </>
   );
