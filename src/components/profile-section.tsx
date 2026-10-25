@@ -66,7 +66,7 @@ export function ProfileSection({ aboutMe }: ProfileSectionProps) {
   }
 
   return (
-    <div ref={slotRef}>
+    <div ref={slotRef} className="profile-slot">
       <svg className="absolute w-0 h-0" aria-hidden="true">
         <defs>
           <filter id="ink-bleed" x="-10%" y="-10%" width="120%" height="120%">

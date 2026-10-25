@@ -125,6 +125,27 @@ li strong {
   }
 }
 
+@media (min-width: 900px) and (min-height: 600px) {
+  .profile-layout {
+    isolation: isolate;
+    column-gap: 2rem;
+  }
+
+  /* Extend the tint to the viewport edge without changing the profile's size. */
+  .profile-slot::before {
+    content: "";
+    position: fixed;
+    top: 42px;
+    bottom: 0;
+    width: calc(100vw + var(--profile-width) - 0.5rem);
+    margin-left: -100vw;
+    background: rgb(var(--foreground) / 0.04);
+    border-right: 1px solid rgb(var(--foreground) / 0.06);
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
 /* Very short windows need the profile in the page flow to keep every link reachable. */
 @media (min-width: 900px) and (max-height: 599px) {
   .profile-layout {
